@@ -6,22 +6,20 @@ import java.util.Random;
 public class museu {
 	static Random gerador = new Random();
 	public static void main(String[] args) {
-		int ordem = 36;
-		Aresta[] arestas = new Aresta[100];
+		int ordem = 40;
+		Aresta[] arestas = new Aresta[120];
 		int[][] matriz = new int[ordem][ordem];
 		
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 120; i++) {
 			arestas[i] = arestaAleatoria(ordem, matriz);
 		}
 		ArrayList<Integer> melhorCaminho = floydWarshall(ordem, arestas);
-		System.out.println(melhorCaminho);
+		String saida = "Melhor caminho: ";
+		for (Integer i : melhorCaminho) {
+			saida += ((i + 1) + " -> ");
+		}
+		System.out.println(saida.substring(0, saida.length() - 4) + "\n\n");
 		gerarGrafo(ordem, arestas, melhorCaminho);
-//		for (int[] is : matriz) {
-//			for (int is2 : is) {
-//				System.out.print(is2 + ", ");
-//			}
-//			System.out.println();
-//		}
 	}
 	
 	public static int verticeAleatorio(int[] verts) {
@@ -78,15 +76,6 @@ public class museu {
 		}
 		
 		return caminho(ordem, 0, ordem - 1, prox);
-		
-//		
-//		for (int i = 0; i < ordem; i++) {
-//			String saida = "";
-//			for (int j = 0; j < ordem; j++) {
-//				saida += distancias[i][j] + ",";
-//			}
-//			System.out.println(saida.substring(0, saida.length() - 1));
-//		}
 	}
 	
 	public static ArrayList<Integer> caminho(int ordem, int orig, int dest, int[][] prox) {
@@ -108,8 +97,15 @@ public class museu {
 		String seta = " -- ";
 		saida += "\"grafo\" {\nnode [width=1.0,height=1.0];\n";
 		for (int i = 0; i < ordem; i++) {
-			saida += "N" + (i + 1) + " [label=\"N" + (i + 1);
-			saida += "\",fontsize=24];\n";
+			String nomeVert = "N" + (i + 1);
+			if(i == 0) {
+				nomeVert = "Entrada";
+			}
+			if (i == ordem - 1) {
+				nomeVert = "Saída";
+			}
+			saida += "N" + (i + 1) + " [label=\"" + nomeVert;
+			saida += "\",fontsize=18];\n";
 		}
 		for (int i = 0; i < arestas.length; i++) {
 			saida += "N" + (arestas[i].orig + 1) + seta; //origem
@@ -121,7 +117,7 @@ public class museu {
 			if(Math.abs(acheiDest - acheiOrig) == 1 && acheiDest > -1 && acheiOrig > -1) {
 				saida += "color=\"blue\",fontcolor=\"blue\",";
 			}
-			saida += "weight=1,style=\"setlinewidth(2.0)\",fontsize=20];\n";
+			saida += "weight=1,style=\"setlinewidth(2.0)\",fontsize=16];\n";
 		}
 		saida += "}";
 		System.out.println(saida);
